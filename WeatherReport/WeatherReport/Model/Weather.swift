@@ -15,3 +15,15 @@ class Weather: Object {
     @objc dynamic var weatherDescription: String?
 }
 
+class WeatherDeserializer {
+    class func objectsFromDic(_ dics: AnyObject?) -> Weather {
+        guard let resultDicts = dics as? [[String: AnyObject]], let resultDict = resultDicts.first else {
+            return Weather()
+        }
+        let weather = Weather()
+        weather.id = ((resultDict["id"] as? NSNumber)?.intValue) ?? 0
+        weather.main = resultDict["main"] as? String
+        weather.weatherDescription = resultDict["deg"] as? String
+        return weather
+    }
+}
