@@ -31,21 +31,9 @@ class WeatherBusinessLayer: NSObject {
         }
     }
     
-    func getCurrentForecast(city: String, contryCode: String, onCompletion completion: @escaping (_ inner: () throws -> Forecast) -> (Void)) {
+    func getCurrentForecast(city: String, contryCode: String) -> Forecast? {
         let realm = try! Realm()
-        let vals = realm.objects(Forecast.self).filter({ $0.date! <= Date(timeIntervalSinceNow: 7200) && $0.date! >= Date(timeIntervalSinceNow: -10800) })
-        if vals.count == 0 {
-            syncForecast(city: "Lyon", contryCode: "FR") { (inner: () throws -> Void) -> (Void) in
-                do {
-                    let _ = try inner()
-                    
-                }
-                catch {
-                    print("Error")
-                }
-            }
-        } else {
-            completion({ vals.first! })
-        }
+        let vals = realm.objects(Forecast.self).filter({ $0.date! <= Date(timeIntervalSinceNow: 10800) && $0.date! >= Date(timeIntervalSinceNow: -10800) })
+        return vals.first
     }
 }
