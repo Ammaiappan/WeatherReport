@@ -33,7 +33,7 @@ class WeatherBusinessLayer: NSObject {
     
     func getCurrentForecast(city: String, contryCode: String, onCompletion completion: @escaping (_ inner: () throws -> Forecast) -> (Void)) {
         let realm = try! Realm()
-        let vals = realm.objects(Forecast.self).filter({ $0.date! <= Date(timeIntervalSinceNow: 3600) && $0.date! >= Date(timeIntervalSinceNow: -10800) })
+        let vals = realm.objects(Forecast.self).filter({ $0.date! <= Date(timeIntervalSinceNow: 7200) && $0.date! >= Date(timeIntervalSinceNow: -10800) })
         if vals.count == 0 {
             syncForecast(city: "Lyon", contryCode: "FR") { (inner: () throws -> Void) -> (Void) in
                 do {
