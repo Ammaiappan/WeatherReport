@@ -23,7 +23,7 @@ class WeatherDeserializer {
         let weather = Weather()
         weather.id = ((resultDict["id"] as? NSNumber)?.intValue) ?? 0
         weather.main = resultDict["main"] as? String
-        weather.weatherDescription = resultDict["deg"] as? String
+        weather.weatherDescription = resultDict["description"] as? String
         return weather
     }
 }

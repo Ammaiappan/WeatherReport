@@ -22,7 +22,7 @@ class Atmosphere: Object {
 
 class AtmosphereDeserializer {
     class func objectsFromDic(_ dics: AnyObject?) -> Atmosphere {
-        guard let resultDicts = dics as? [[String: AnyObject]], let resultDict = resultDicts.first else {
+        guard let resultDict = dics as? [String: AnyObject] else {
             return Atmosphere()
         }
         let atmosphere = Atmosphere()

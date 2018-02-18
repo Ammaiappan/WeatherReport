@@ -7,17 +7,45 @@
 //
 
 import UIKit
+import RealmSwift
 
 class WeatherBusinessLayer: NSObject {
-    func getForecast(city: String, contryCode: String, onCompletion completion: @escaping (_ inner: () throws -> Void) -> (Void)) {
-        WetherDataService().getForecast(city: city, contryCode: contryCode) { (inner: () throws -> Any) -> (Void) in
+    func syncForecast(city: String, contryCode: String, onCompletion completion: @escaping (_ inner: () throws -> Void) -> (Void)) {
+        WetherDataService().getForecast(city: city, contryCode: contryCode) { (inner: () throws -> [Forecast]) -> (Void) in
             do {
-                let val = try inner()
-                print(val)
+                let forecasts = try inner()
+                DispatchQueue(label: "background").async {
+                    autoreleasepool {
+                        let realm = try! Realm()
+                        try! realm.write {
+                            realm.deleteAll()
+                            realm.add(forecasts)
+                            completion({ })
+                        }
+                    }
+                }
             }
             catch {
                 
             }
+        }
+    }
+    
+    func getCurrentForecast(city: String, contryCode: String, onCompletion completion: @escaping (_ inner: () throws -> Forecast) -> (Void)) {
+        let realm = try! Realm()
+        let vals = realm.objects(Forecast.self).filter({ $0.date! <= Date(timeIntervalSinceNow: 3600) && $0.date! >= Date(timeIntervalSinceNow: -10800) })
+        if vals.count == 0 {
+            syncForecast(city: "Lyon", contryCode: "FR") { (inner: () throws -> Void) -> (Void) in
+                do {
+                    let _ = try inner()
+                    
+                }
+                catch {
+                    print("Error")
+                }
+            }
+        } else {
+            completion({ vals.first! })
         }
     }
 }

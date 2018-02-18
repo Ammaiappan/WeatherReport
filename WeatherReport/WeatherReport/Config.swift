@@ -8,5 +8,5 @@
 
 import UIKit
 
-let baseUrl = "http://samples.openweathermap.org/data/2.5"
-let wetherAppId = "b6907d289e10d714a6e88b30761fae22"
+let baseUrl = "http://api.openweathermap.org/data/2.5"
+let wetherAppId = "8e52d84c3a1b1f5dc2dcd7abbda98247"
